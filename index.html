@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Diabetes Detection</h1>
+        <form id="prediction-form">
+            <input type="text" name="pregnancies" placeholder="Pregnancies" required>
+            <input type="text" name="glucose" placeholder="Glucose Level" required>
+            <input type="text" name="bloodpressure" placeholder="Blood Pressure" required>
+            <input type="text" name="skinthickness" placeholder="Skin Thickness" required>
+            <input type="text" name="insulin" placeholder="Insulin Level" required>
+            <input type="text" name="bmi" placeholder="BMI" required>
+            <input type="text" name="dpf" placeholder="Diabetes Pedigree Function" required>
+            <input type="text" name="age" placeholder="Age" required>
+
+            <select name="model">
+                <option value="logistic_regression">Logistic Regression</option>
+                <option value="decision_tree">Decision Tree</option>
+            </select>
+
+            <button type="submit">Predict</button>
+        </form>
+
+        <h2 id="result"></h2>
+        <a href="/charts">View Data Charts</a> | <a href="/metrics">Model Metrics</a>
+    </div>
+
+    <script>
+        document.getElementById("prediction-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let formData = new FormData(this);
+            
+            fetch("/predict", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText = "Prediction: " + data.prediction;
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+</body>
+</html>
